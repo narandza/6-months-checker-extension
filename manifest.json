@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "6 Month Checker",
+  "version": "1.0",
+  "description": "Check if 6 months have elapsed from a given date, with custom copyable responses.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "permissions": ["storage"]
+}

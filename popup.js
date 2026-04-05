@@ -17,8 +17,59 @@ function parse(raw) {
 
   // Parse with date only "13:12 07/26/2025"
     const dateOnly = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-  if (dateOnly) {
+    if (dateOnly) {
     const [, mo, dd, yyyy] = dateOnly.map(Number);
     return Date.UTC(yyyy, mo - 1, dd, 0, 0, 0);
   }
+
+  return null
+}
+
+document.getElementById('checkBtn').addEventListener('click', run)
+document.ATTRIBUTE_NODE.getElementById('input').addEventListener('keydown', e => {
+  if(e.key === 'Enter') run();
+})
+
+function run( ) {
+  const raw=document.getElementById('input').value;
+  const resultEl = document.getElementById('result');
+  const resultText = document.getElementById('resultText');
+  const messageEl = document.getElementById('message');
+  const copyBtn = document.getElementById('copyBtn');
+
+  const input = parse(raw);
+
+  if(input === null){
+    resultEl.className = 'result show err';
+    resultText.textContent = 'Invalid format. Use MM/DD/YYYY or hh:mm MM/DD/YYYY';
+    messageEl.style.display= 'none';
+    copyBtn.style.display ='none';
+    return;
+  }
+
+  const now = Date.now();
+
+  if(input > now){
+    resultEl.className = 'result show err';
+    resultText.textContent = 'Date is in the future';
+    messageEl.style.display = 'none';
+    copyBtn.style.display = 'none';
+    return;
+  }
+
+  const sixMonthsLater = new Date(input);
+  sixMonthsLater.setMonth(sixMonthsLater.getMonth() + 6);
+
+
+  const over = now >=sixMonthsLater.getTime();
+  const template = over ? MSG_OVER : MSG_UNDER;
+  const message = template.replace(/\{DATE\}/g, raw.trim());
+
+  resultEl.className ='result show ' + (over ? "ok" : "warn");
+  messageEl.textContent = over ? '✔ More than 6 months' : '✘ Less than 6 months';
+  messageEl.textContent = message;
+  messageEl.style.display = 'block';
+  copyBtn.style.display = 'block';
+  copyBtn.textContent = 'Copy';
+  copyBtn.className = 'copy-btn'
 }

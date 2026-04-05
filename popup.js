@@ -66,3 +66,15 @@ function run() {
   copyBtn.textContent = 'Copy';
   copyBtn.className = 'copy-btn';
 }
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const msg = document.getElementById('message').textContent;
+  navigator.clipboard.writeText(msg).then(() => {
+    const btn = document.getElementById("copyBtn");
+  btn.textContent = 'Copied ✔';
+  btn.classList.add('copied');
+  setTimeout(() => {
+    btn.textContent = 'Copy';
+    btn.classList.remove('copied')
+  }, 1000);
+})
